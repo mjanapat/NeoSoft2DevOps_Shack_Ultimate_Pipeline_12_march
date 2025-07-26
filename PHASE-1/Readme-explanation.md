@@ -16,4 +16,27 @@ Applying calico.yaml:
 - Installs Calico components like calico-node (DaemonSet), calico-kube-controllers, and CRDs.
 - Sets up IP pools, routing rules, and default network policies.
 - Enables pod networking so that nodes can transition from NotReady to Ready.
+---------------
+
+
+
+
+ kubeaudit vs kube-bench
+| Feature                         | kubeaudit|                                                      | kube-bench |
+
+
+| Focus      | Detects security misconfigurations in manifests or live cluster            | Checks compliance with CIS Kubernetes Benchmarks | 
+| Scope      | Pod specs, containers, namespaces, RBAC, etc.                              | Node-level config, API server flags, etcd, kubelet | 
+| Modes      | Manifest, Local, Cluster                                                   | Cluster-only (runs as pod or job) | 
+| Output     | Error, Warn, Info with fix suggestions                                    | Pass/Fail with CIS section references | 
+| Language   | Go (by Shopify)                                                         | Go (by Aqua Security) | 
+| Use Case   | DevSecOps audits, CI/CD manifest checks                                 | Periodic compliance scans, hardening validation | 
+
+
+🧠 How They Work Together
+- kubeaudit is great for catching risky pod-level configs like runAsRoot, missing readOnlyRootFilesystem, or privileged: true.
+- kube-bench dives deeper into cluster setup—verifying kubelet flags, API server TLS settings, etc.
+If you’re building a security pipeline, you’d typically run:
+- kubeaudit during CI/CD or manifest review
+- kube-bench periodically on nodes or during cluster bring-up
 
