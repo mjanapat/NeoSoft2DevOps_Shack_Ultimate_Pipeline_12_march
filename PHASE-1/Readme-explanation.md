@@ -39,4 +39,35 @@ Applying calico.yaml:
 If you’re building a security pipeline, you’d typically run:
 - kubeaudit during CI/CD or manifest review
 - kube-bench periodically on nodes or during cluster bring-up
+-------
+To access sonarqube, Jenkins and Nexus from my loacal machine add another adapter 
+🔧 Next Steps for a Clean Setup
+- Add Adapter3 (Bridged)
+- Choose your active physical adapter (e.g., Ethernet or Wi-Fi).
+- Enable Promiscuous Mode: Allow All if required for traffic sniffing or agent communication.
+- Inside VM: Confirm Bridged IP
+- Run ip a or ifconfig inside your Jenkins/Sonar/Nexus VM.
+- Note the IP address under Adapter3 — it should match your LAN/subnet (e.g., 192.168.1.x).
+- Ping Test
+- From the Jenkins VM, ping the cluster nodes using their Host-Only IPs and Bridged IPs.
+- Ensure full reachability — this validates the dual-net handshake.
+- Optional Routing Check
+ip route
+
+
+- Confirm your traffic doesn’t unintentionally bypass the cluster subnet.
+
+🧭 Final Adapter View (Target Setup)
+| Adapter | Type | Purpose | 
+| Adapter1 | Host-Only | Kubernetes control plane access | 
+| Adapter2 | NAT | Internet for tool downloads | 
+| Adapter3 | Bridged | CI/CD ↔ Cluster communication | 
+
+
+
+If you'd like, I can sketch out your final network topology with IP ranges and data flow for Jenkins ↔ Cluster. Or we can codify all this into a reusable recovery playbook. Just say the word.
+
+
+
+
 
